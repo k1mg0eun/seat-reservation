@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.Duration;
 import java.time.Instant;
 
 @Entity
@@ -33,5 +34,17 @@ public class Seat {
         this.concertId = concertId;
         this.seatNo = seatNo;
         status = SeatStatus.AVAILABLE;
+    }
+
+    public void hold(Long userId, Instant now, Duration holdDuration){
+        if (status == SeatStatus.RESERVED){
+            throw new IllegalStateException("이미 예약된 좌석입니다");
+        }
+        if (status == SeatStatus.HELD && heldUntil.isAfter(now)){
+            throw new IllegalStateException("예약 불가능한 좌석입니다.");
+        }
+        heldBy = userId;
+        heldUntil = now.plus(holdDuration);
+        this.status = SeatStatus.HELD;
     }
 }
