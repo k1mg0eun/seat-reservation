@@ -31,4 +31,22 @@ public class ReservationService {
         return reservationRepository.save(reservation).getId();
 
     }
+
+    @Transactional
+    public void confirm(Long reservationId, Long userId){
+        // 예약 id로 예약을 읽는다. 없으면 예외.
+        Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 예약입니다."));
+
+        // 그 예약에게 "이 userId가 지금 확정한다"고 시킨다.
+        Instant now = Instant.now();
+        reservation.confirm(userId, now);
+
+        // 예약에 적힌 seatId로 좌석을 읽는다.
+        Seat seat = seatRepository.findById(reservation.getSeatId()).orElseThrow(() -> new IllegalStateException("예약에 연결된 좌석이 없습니다."));
+
+        // 좌석에게 "확정됐다"고 시킨다.
+        seat.confirm(userId);
+
+    }
+
 }

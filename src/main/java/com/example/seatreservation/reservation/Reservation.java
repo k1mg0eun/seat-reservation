@@ -33,4 +33,18 @@ public class Reservation {
         this.expiresAt = expiresAt;
         this.status = ReservationStatus.HELD;
     }
+
+
+    public void confirm(Long userId, Instant now){
+        if(!this.userId.equals(userId)){
+            throw new IllegalStateException("본인의 예약이 아닙니다.");
+        }
+        if(this.status != ReservationStatus.HELD){
+            throw new IllegalStateException("이미 확정되거나 취소된 예약입니다.");
+        }
+        if(this.expiresAt.isBefore(now)){
+            throw new IllegalStateException("점유 시간이 만료되었습니다.");
+        }
+        this.status = ReservationStatus.CONFIRMED;
+    }
 }

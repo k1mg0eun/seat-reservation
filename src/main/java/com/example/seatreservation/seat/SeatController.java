@@ -17,5 +17,4 @@ public class SeatController {
     public List<Seat> seats(@PathVariable Long concertId){
         return seatRepository.findByConcertIdOrderBySeatNo(concertId);
     }
-
 }

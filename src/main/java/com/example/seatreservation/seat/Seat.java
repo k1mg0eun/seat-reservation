@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import java.time.Duration;
 import java.time.Instant;
 
+import static com.example.seatreservation.seat.SeatStatus.RESERVED;
+
 @Entity
 @Table(name = "seat")
 @Getter
@@ -37,7 +39,7 @@ public class Seat {
     }
 
     public void hold(Long userId, Instant now, Duration holdDuration){
-        if (status == SeatStatus.RESERVED){
+        if (status == RESERVED){
             throw new IllegalStateException("이미 예약된 좌석입니다");
         }
         if (status == SeatStatus.HELD && heldUntil.isAfter(now)){
@@ -46,5 +48,16 @@ public class Seat {
         heldBy = userId;
         heldUntil = now.plus(holdDuration);
         this.status = SeatStatus.HELD;
+    }
+
+    public void confirm(Long userId){
+        if(status != SeatStatus.HELD){
+            throw new IllegalStateException("점유 중인 좌석이 아닙니다.");
+        }
+        if(!heldBy.equals(userId)){
+            throw new IllegalStateException("다른 사용자가 점유 중인 좌석입니다.");
+        }
+        status = SeatStatus.RESERVED;
+        heldUntil = null;
     }
 }
