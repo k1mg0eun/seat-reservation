@@ -22,4 +22,10 @@ public class ReservationController {
     public void confirm(@PathVariable Long reservationId, @RequestParam Long userId){
         reservationService.confirm(reservationId, userId);
     }
+
+    @PostMapping("/reservations/{reservationId}/cancel")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void cancel(@PathVariable Long reservationId, @RequestParam Long userId) {
+        reservationService.cancel(reservationId, userId);
+    }
 }

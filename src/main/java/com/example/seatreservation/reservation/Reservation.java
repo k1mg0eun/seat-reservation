@@ -47,4 +47,14 @@ public class Reservation {
         }
         this.status = ReservationStatus.CONFIRMED;
     }
+
+    public void cancel(Long userId){
+        if (!this.userId.equals(userId)){
+            throw new IllegalStateException("본인의 예약이 아닙니다.");
+        }
+        if(this.status == ReservationStatus.CANCELED || this.status == ReservationStatus.EXPIRED){
+            throw new IllegalStateException("이미 취소되거나 만료된 예약입니다.");
+        }
+        this.status = ReservationStatus.CANCELED;
+    }
 }

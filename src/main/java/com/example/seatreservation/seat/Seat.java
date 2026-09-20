@@ -60,4 +60,10 @@ public class Seat {
         status = SeatStatus.RESERVED;
         heldUntil = null;
     }
+
+    public void release(){
+        this.status = SeatStatus.AVAILABLE;
+        this.heldBy = null;
+        this.heldUntil = null;
+    }
 }
