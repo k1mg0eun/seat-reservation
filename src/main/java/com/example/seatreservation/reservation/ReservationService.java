@@ -54,7 +54,7 @@ public class ReservationService {
         Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 예약입니다."));
         reservation.cancel(userId);
 
-        Seat seat = seatRepository.findById(reservation.getSeatId()).orElseThrow(() -> new IllegalStateException("예약에 연결된 자석이 없습니다"));
+        Seat seat = seatRepository.findById(reservation.getSeatId()).orElseThrow(() -> new IllegalStateException("예약에 연결된 좌석이 없습니다."));
         seat.release();
     }
 }
